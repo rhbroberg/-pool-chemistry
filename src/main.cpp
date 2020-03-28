@@ -6,10 +6,8 @@
 #include <WiFi.h>
 #include "PubSubClient.h"
 #include <driver/gpio.h>
-
-// Wifi configuration
-const char *ssid = "***";
-const char *password = "***";
+#include "PushOTA.h"
+#include "passwords.h"
 
 // MQTT configuration
 //const char* server = "ubuntu-18-04-04";
@@ -24,80 +22,6 @@ WiFiClient wifiClient;
 PubSubClient client(wifiClient);
 
 bool stayAwake = false;
-
-#ifdef BUSTED
-#include "ArduinoOTA.h"
-
-const int led = 2;
-
-void blinkMe(const int count, const int pause = 1000)
-{
-  for (int i = 0; i < count; i++)
-  {
-    pinMode(led, OUTPUT);
-    digitalWrite(led, LOW);
-    delay(pause);
-    digitalWrite(led, HIGH);
-    // only delay again if not the last one
-    if (i + 1 < count)
-    {
-      delay(pause);
-    }
-  }
-}
-
-// ArduinoOTAClass ArduinoOTA;
-
-void enableOTA()
-{
-  // Port defaults to 8266
-  // ArduinoOTA.setPort(8266);
-
-  // Hostname defaults to esp8266-[ChipID]
-  // ArduinoOTA.setHostname("myesp8266");
-
-  // No authentication by default
-  // ArduinoOTA.setPassword((const char *)"123");
-  ArduinoOTA.onStart([]() {
-    Serial.println("Start");
-    pinMode(led, OUTPUT);
-    blinkMe(5, 200);
-  });
-  ArduinoOTA.onEnd([]() {
-    Serial.println("\nEnd");
-    blinkMe(5, 200);
-  });
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-    if ((progress / total) % 20 == 0)
-    {
-      if (digitalRead(led) == HIGH)
-      {
-        digitalWrite(led, LOW);
-      }
-      else
-      {
-        digitalWrite(led, HIGH);
-      }
-    }
-  });
-  ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR)
-      Serial.println("Auth Failed");
-    else if (error == OTA_BEGIN_ERROR)
-      Serial.println("Begin Failed");
-    else if (error == OTA_CONNECT_ERROR)
-      Serial.println("Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR)
-      Serial.println("Receive Failed");
-    else if (error == OTA_END_ERROR)
-      Serial.println("End Failed");
-  });
-  ArduinoOTA.begin();
-  stayAwake = true;
-}
-#endif
 
 void wifiConnect()
 {
@@ -166,18 +90,32 @@ void measureAndPublish()
 
 unsigned count = 0;
 RTC_DATA_ATTR int bootCount = 0;
+PushOTA ota;
 
 void setup()
 {
-  // maybe connect to ntp server for time occasionally? protocols/sntp example
-  // check if rtc initialized, if not ntp client configure it, if frequency change of sompling is desired (less at night)
-  // will only work if deep sleep hiberation is not used
   bootCount++;
   // put your setup code here, to run once:
   Serial.begin(115200);
+
   Serial.println("Boot number: " + String(bootCount));
 
+  // some activities may need to be performed on a power-on reset which is ESP_RST_DEEPSLEEP;
+  // ESP_RST_POWERON is other popular reason
+  // maybe connect to ntp server for time occasionally? protocols/sntp example
+  // check if rtc initialized, if not ntp client configure it, if frequency change of sompling is desired (less at night)
+  // will only work if deep sleep hiberation is not used
+  esp_reset_reason_t whyReset = esp_reset_reason();
+  Serial.print("reset because ");
+  Serial.println(whyReset);
+
   begin();
+
+#ifdef NOT_YET
+  ota.setNetworking(ssid, password, OTA_AUTH);
+  stayAwake = false;
+  ota.enable();
+#endif
 }
 
 void loop()
@@ -186,7 +124,7 @@ void loop()
 
   if (!stayAwake)
   {
-    // for hibernation; RTC_DATA_ATTR may prevent rtc clock going off
+    // for hibernation; RTC_DATA_ATTR may prevent rtc clock going off; alternatively turning off rtc may corrupt RTC_DATA_ATTR
     esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
     esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_OFF);
     esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
@@ -197,16 +135,7 @@ void loop()
   }
   else
   {
-#ifdef BUSTED
-    // should set a timer and turn off this mode after 5 minutes
-    ArduinoOTA.handle();
-
-    // remind user we are not deep sleeping
-    if ((count++ % 10) == 0)
-    {
-      blinkMe(1, 5);
-    }
-#endif
+    ota.handle();
     delay(1000);
   }
 }
