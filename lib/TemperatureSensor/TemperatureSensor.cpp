@@ -11,11 +11,26 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 DeviceAddress firstTempSensor;
 
+// function to print a device address
+void printAddress(DeviceAddress deviceAddress)
+{
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        if (deviceAddress[i] < 16)
+        {
+            Serial.print("0");
+        }
+        Serial.print(deviceAddress[i], HEX);
+    }
+}
+
 const double
 sampleTemperature()
 {
     digitalWrite(27, HIGH);
+
     Serial.print("Requesting temperatures...");
+    sensors.setResolution(firstTempSensor, 9);
     if (!sensors.requestTemperaturesByAddress(firstTempSensor))
     {
         Serial.println("failed");
@@ -33,24 +48,12 @@ sampleTemperature()
     return temperature;
 }
 
-// function to print a device address
-void printAddress(DeviceAddress deviceAddress)
-{
-    for (uint8_t i = 0; i < 8; i++)
-    {
-        if (deviceAddress[i] < 16)
-        {
-            Serial.print("0");
-        }
-        Serial.print(deviceAddress[i], HEX);
-    }
-}
-
 void begin()
 {
     // temperature power
     pinMode(27, OUTPUT);
     digitalWrite(27, HIGH);
+
     sensors.begin();
 
     // search for devices on the bus and assign based on an index.
@@ -59,7 +62,6 @@ void begin()
         Serial.println("Unable to find address for Device 0");
     }
 
-    sensors.setResolution(firstTempSensor, 9);
     // show the addresses we found on the bus
     Serial.print("Device 0 Address: ");
     printAddress(firstTempSensor);

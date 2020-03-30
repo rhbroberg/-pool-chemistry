@@ -8,6 +8,7 @@
 #include <driver/gpio.h>
 #include "PushOTA.h"
 #include "passwords.h"
+#include "esp_task_wdt.h"
 
 // MQTT configuration
 //const char* server = "ubuntu-18-04-04";
@@ -20,6 +21,9 @@ const char *clientName = "com.brobasino.esp32";
 
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
+unsigned count = 0;
+RTC_DATA_ATTR int bootCount = 0;
+PushOTA ota;
 
 bool stayAwake = false;
 
@@ -88,15 +92,19 @@ void measureAndPublish()
   WiFi.mode(WIFI_OFF);
 }
 
-unsigned count = 0;
-RTC_DATA_ATTR int bootCount = 0;
-PushOTA ota;
-
 void setup()
 {
   bootCount++;
-  // put your setup code here, to run once:
   Serial.begin(115200);
+  esp_err_t initWDTStatus = esp_task_wdt_init(10, true);
+
+  if (initWDTStatus != ESP_OK)
+  {
+    Serial.print("cannot init WDT: ");
+    Serial.println(ESP_OK);
+  }
+  esp_task_wdt_add(xTaskGetIdleTaskHandleForCPU(0));
+  esp_task_wdt_add(xTaskGetIdleTaskHandleForCPU(1));
 
   Serial.println("Boot number: " + String(bootCount));
 
@@ -130,7 +138,7 @@ void loop()
     esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
 
     // now go to sleep
-    esp_sleep_enable_timer_wakeup(10 * 1e6);
+    esp_sleep_enable_timer_wakeup(5 * 1e6);
     esp_deep_sleep_start();
   }
   else

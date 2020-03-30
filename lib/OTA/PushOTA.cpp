@@ -26,7 +26,7 @@ void PushOTA::setPort(const uint16_t port)
 const bool
 PushOTA::enable()
 {
-    if (WiFi.status != WL_CONNECTED)
+    if (WiFi.status() != WL_CONNECTED)
     {
         WiFi.mode(WIFI_STA);
         WiFi.begin(_ssid, _password);
