@@ -8459,6 +8459,14 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="O10" gate="G$1" pin="1"/>
 <wire x1="27.94" y1="13.97" x2="27.94" y2="69.85" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="ESPWROOM" gate="G$1" pin="IO35"/>
+<wire x1="43.18" y1="80.01" x2="27.94" y2="80.01" width="0.1524" layer="91"/>
+<pinref part="O10" gate="G$1" pin="2"/>
+<pinref part="O15" gate="G$1" pin="1"/>
+<junction x="27.94" y="80.01"/>
+<label x="33.02" y="81.28" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="TDSSIG" class="0">
 <segment>
@@ -8482,6 +8490,14 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="33.02" y1="64.77" x2="20.32" y2="64.77" width="0.1524" layer="91"/>
 <pinref part="P10" gate="G$1" pin="1"/>
 <wire x1="33.02" y1="64.77" x2="33.02" y2="-16.51" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="P10" gate="G$1" pin="2"/>
+<pinref part="P15" gate="G$1" pin="1"/>
+<pinref part="ESPWROOM" gate="G$1" pin="IO33"/>
+<wire x1="43.18" y1="74.93" x2="20.32" y2="74.93" width="0.1524" layer="91"/>
+<junction x="20.32" y="74.93"/>
+<label x="10.16" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TX" class="0">
@@ -8568,24 +8584,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <segment>
 <pinref part="LED1" gate="G$1" pin="C"/>
 <pinref part="L1K" gate="G$1" pin="1"/>
-</segment>
-</net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="ESPWROOM" gate="G$1" pin="IO35"/>
-<wire x1="43.18" y1="80.01" x2="27.94" y2="80.01" width="0.1524" layer="91"/>
-<pinref part="O10" gate="G$1" pin="2"/>
-<pinref part="O15" gate="G$1" pin="1"/>
-<junction x="27.94" y="80.01"/>
-</segment>
-</net>
-<net name="N$4" class="0">
-<segment>
-<pinref part="P10" gate="G$1" pin="2"/>
-<pinref part="P15" gate="G$1" pin="1"/>
-<pinref part="ESPWROOM" gate="G$1" pin="IO33"/>
-<wire x1="43.18" y1="74.93" x2="20.32" y2="74.93" width="0.1524" layer="91"/>
-<junction x="20.32" y="74.93"/>
 </segment>
 </net>
 </nets>
