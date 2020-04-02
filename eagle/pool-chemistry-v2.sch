@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -50,7 +50,7 @@
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
-<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="no" active="yes"/>
 <layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
@@ -10684,9 +10684,9 @@ In this library the device names are the same as the pin names of the symbols, t
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="0.1"/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="47"/>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="IC1" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="MCP1703" device="CB" package3d_urn="urn:adsk.eagle:package:16489/2"/>
+<part name="LDO" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="MCP1703" device="CB" package3d_urn="urn:adsk.eagle:package:16489/2"/>
 <part name="SUPPLY1" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="VSS" device=""/>
-<part name="BAT" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2" value="5v"/>
+<part name="BAT" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="PAD1" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="SMD5" device="" package3d_urn="urn:adsk.eagle:package:30841/1"/>
 <part name="PAD2" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="SMD5" device="" package3d_urn="urn:adsk.eagle:package:30841/1"/>
 </parts>
@@ -10830,7 +10830,7 @@ In this library the device names are the same as the pin names of the symbols, t
 <instance part="GND12" gate="1" x="-10.16" y="88.9" smashed="yes">
 <attribute name="VALUE" x="-12.7" y="86.36" size="1.778" layer="96"/>
 </instance>
-<instance part="IC1" gate="G$1" x="1.27" y="111.76" smashed="yes">
+<instance part="LDO" gate="G$1" x="1.27" y="111.76" smashed="yes">
 <attribute name="NAME" x="-6.35" y="117.475" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-6.35" y="114.935" size="1.778" layer="96"/>
 </instance>
@@ -10900,7 +10900,7 @@ In this library the device names are the same as the pin names of the symbols, t
 <wire x1="35.56" y1="111.76" x2="40.64" y2="111.76" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="106.68" x2="35.56" y2="111.76" width="0.1524" layer="91"/>
 <junction x="35.56" y="111.76"/>
-<pinref part="IC1" gate="G$1" pin="VO"/>
+<pinref part="LDO" gate="G$1" pin="VO"/>
 <wire x1="11.43" y1="111.76" x2="29.21" y2="111.76" width="0.1524" layer="91"/>
 <junction x="29.21" y="111.76"/>
 </segment>
@@ -11013,7 +11013,7 @@ In this library the device names are the same as the pin names of the symbols, t
 <wire x1="1.27" y1="82.55" x2="1.27" y2="91.44" width="0.1524" layer="91"/>
 <junction x="1.27" y="91.44"/>
 <junction x="10.16" y="91.44"/>
-<pinref part="IC1" gate="G$1" pin="GND"/>
+<pinref part="LDO" gate="G$1" pin="GND"/>
 <wire x1="1.27" y1="104.14" x2="1.27" y2="96.52" width="0.1524" layer="91"/>
 <pinref part="BAT" gate="G$1" pin="1"/>
 <wire x1="1.27" y1="96.52" x2="1.27" y2="91.44" width="0.1524" layer="91"/>
@@ -11164,7 +11164,7 @@ In this library the device names are the same as the pin names of the symbols, t
 <wire x1="78.74" y1="48.26" x2="83.82" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="TOUCH1" class="0">
+<net name="TOUCH2" class="0">
 <segment>
 <pinref part="ESPWROOM" gate="G$1" pin="IO0"/>
 <wire x1="91.44" y1="62.23" x2="104.14" y2="62.23" width="0.1524" layer="91"/>
@@ -11206,7 +11206,7 @@ In this library the device names are the same as the pin names of the symbols, t
 </net>
 <net name="VSS" class="0">
 <segment>
-<pinref part="IC1" gate="G$1" pin="VI"/>
+<pinref part="LDO" gate="G$1" pin="VI"/>
 <wire x1="-8.89" y1="111.76" x2="-15.24" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="SUPPLY1" gate="G$1" pin="VSS"/>
 <wire x1="-15.24" y1="116.84" x2="-15.24" y2="111.76" width="0.1524" layer="91"/>
@@ -11217,7 +11217,7 @@ In this library the device names are the same as the pin names of the symbols, t
 <junction x="-15.24" y="111.76"/>
 </segment>
 </net>
-<net name="TOUCH2" class="0">
+<net name="TOUCH1" class="0">
 <segment>
 <pinref part="ESPWROOM" gate="G$1" pin="IO27"/>
 <wire x1="43.18" y1="67.31" x2="38.1" y2="67.31" width="0.1524" layer="91"/>
