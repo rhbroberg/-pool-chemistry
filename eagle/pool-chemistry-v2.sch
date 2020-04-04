@@ -11234,16 +11234,17 @@ In this library the device names are the same as the pin names of the symbols, t
 <approved hash="202,1,43.18,87.63,ESPWROOM,SENSOR_VP,,,,"/>
 <approved hash="202,1,43.18,85.09,ESPWROOM,SENSOR_VN,,,,"/>
 <approved hash="202,1,43.18,82.55,ESPWROOM,IO34,,,,"/>
-<approved hash="113,1,116.798,118.369,TEMP,,,,,"/>
-<approved hash="113,1,86.3177,0.259078,ORP,,,,,"/>
-<approved hash="113,1,53.2977,0.259078,TDS,,,,,"/>
-<approved hash="113,1,120.595,24.3891,AP3602A-PH,,,,,"/>
-<approved hash="113,1,88.5654,24.3891,AP3602A-ORP,,,,,"/>
-<approved hash="113,1,-0.0423313,44.7091,JTAG,,,,,"/>
-<approved hash="113,1,116.798,96.7791,UART,,,,,"/>
-<approved hash="113,1,119.338,0.259078,PH,,,,,"/>
+<approved hash="113,1,116.798,118.4,TEMP,,,,,"/>
+<approved hash="113,1,86.3177,0.289559,ORP,,,,,"/>
+<approved hash="113,1,53.2977,0.289559,TDS,,,,,"/>
+<approved hash="113,1,120.595,24.4196,AP3602A-PH,,,,,"/>
+<approved hash="113,1,88.5654,24.4196,AP3602A-ORP,,,,,"/>
+<approved hash="113,1,-0.0423313,44.7396,JTAG,,,,,"/>
+<approved hash="113,1,116.798,96.8096,UART,,,,,"/>
+<approved hash="113,1,119.338,0.289559,PH,,,,,"/>
 <approved hash="113,1,87.63,48.5817,LED1,,,,,"/>
 <approved hash="113,1,78.636,41.806,FRAME1,,,,,"/>
+<approved hash="113,1,-23.0971,96.2939,BAT,,,,,"/>
 <approved hash="113,1,49.8094,30.4825,PAD1,,,,,"/>
 <approved hash="113,1,104.419,60.9625,PAD2,,,,,"/>
 </errors>
