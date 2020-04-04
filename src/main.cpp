@@ -92,21 +92,34 @@ void measureAndPublish()
   WiFi.mode(WIFI_OFF);
 }
 
-void setup()
+void enableWatchdog()
 {
-  bootCount++;
-  Serial.begin(115200);
-  esp_err_t initWDTStatus = esp_task_wdt_init(10, true);
+  // these variables are defined in .platformio/packages/framework-arduinoespressif32/cores/esp32/main.cpp
+  // this will enable the wrapper around loop() to feed the watchdog
+  extern TaskHandle_t loopTaskHandle;
+  extern bool loopTaskWDTEnabled;
 
-  if (initWDTStatus != ESP_OK)
+  loopTaskWDTEnabled = true;
+  esp_err_t initWDTStatus = esp_task_wdt_init(10, true);
+  esp_err_t wdtSelfStatus = esp_task_wdt_add(loopTaskHandle);
+
+  if ((initWDTStatus != ESP_OK) || (wdtSelfStatus != ESP_OK))
   {
-    Serial.print("cannot init WDT: ");
-    Serial.println(ESP_OK);
+    Serial.print("watchdog configuration failed: ");
+    Serial.println(initWDTStatus);
+    Serial.println(wdtSelfStatus);
   }
+  // enable idle-task watchdog watching/feeding as well to catch spins
   esp_task_wdt_add(xTaskGetIdleTaskHandleForCPU(0));
   esp_task_wdt_add(xTaskGetIdleTaskHandleForCPU(1));
+}
 
+void setup()
+{
   Serial.println("Boot number: " + String(bootCount));
+  bootCount++;
+  Serial.begin(115200);
+  enableWatchdog();
 
   // some activities may need to be performed on a power-on reset which is ESP_RST_DEEPSLEEP;
   // ESP_RST_POWERON is other popular reason
@@ -116,6 +129,7 @@ void setup()
   esp_reset_reason_t whyReset = esp_reset_reason();
   Serial.print("reset because ");
   Serial.println(whyReset);
+  // if reset for any other reason probably add to list of mqtt topics to update for telemetry
 
   begin();
 
