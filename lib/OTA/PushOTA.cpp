@@ -4,17 +4,19 @@
 #include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+#include "esp_task_wdt.h"
 
 PushOTA::PushOTA()
     : _ssid(NULL), _password(NULL), _auth(NULL)
 {
 }
 
-void PushOTA::setNetworking(const char *ssid, const char *password, const char *auth)
+void PushOTA::setNetworking(const char *ssid, const char *password, const char *auth, const char *hostname)
 {
     _ssid = ssid;
     _password = password;
     _auth = auth;
+    _hostname = hostname;
 }
 
 // defaults to 3232
@@ -37,9 +39,6 @@ PushOTA::enable()
         }
     }
 
-    // Hostname defaults to esp3232-[MAC]
-    // ArduinoOTA.setHostname("myesp32");
-
     ArduinoOTA
         .onStart([]() {
             String type;
@@ -56,6 +55,8 @@ PushOTA::enable()
         })
         .onProgress([](unsigned int progress, unsigned int total) {
             Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+            // feed the watchdog, loop() not being exercised
+            esp_task_wdt_reset();
         })
         .onError([](ota_error_t error) {
             Serial.printf("Error[%u]: ", error);
@@ -75,11 +76,15 @@ PushOTA::enable()
     {
         ArduinoOTA.setPassword(_auth);
     }
+    if (_hostname)
+    {
+        // defaults is esp3232-[MAC]
+        ArduinoOTA.setHostname(_hostname);
+    }
+
     ArduinoOTA.begin();
 
-    Serial.println("Ready");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
+    Serial.printf("Ready for OTA.  IP address: %s", WiFi.localIP().toString().c_str());
 
     return true;
 }
@@ -87,7 +92,7 @@ PushOTA::enable()
 void PushOTA::disable()
 {
     ArduinoOTA.end();
-    // disable wifi?
+    // disable wifi? if not successful probably have to
 }
 
 void PushOTA::handle()
